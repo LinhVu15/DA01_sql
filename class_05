@@ -7,13 +7,27 @@ select count(city) - count(distinct city)  from station
 SELECT Round(CAST(SUM(item_count*order_occurrences)/SUM(order_occurrences) as decimal),1)
 FROM items_per_order;
 --ex5
-SELECT candidate_id  FROM candidates where skill in ('Python', 'Tableau', 'PostgreSQL')
+SELECT candidate_id  FROM candidates where skill in ('Python', 'Tableau', 'PostgreSQL') group by candidate_id having count(skill)=3
 --ex6 
+select user_id,
+DATE(max(post_date))-DATE(min(post_date)) as day_between
+from posts
+where post_date>= '2021-01-01' and post_date<='2022-01-01'
+group by user_id
+having count(post_id)>=2
 --ex7
-SELECT card_name, (MAX(issued_amount)-MIN(issued_amount)) as difference FROM monthly_cards_issued group by card_name
+SELECT card_name, (MAX(issued_amount)-MIN(issued_amount)) as difference FROM monthly_cards_issued group by card_name order by difference DESC 
 --ex8
+SELECT manufacturer, count(drug) as drug_total,
+ABS(SUM(cogs-total_sales)) as total_lost
+from pharmacy_sales
+where total_sales<cogs
+group by manufacturer
+order by total_lost DESC
 --ex9
+select * from cinema where id%2=1 and description!='boring' order by rating DESC
 --ex10
+select teacher_id, count(distinct subject_id) as cnt from Teacher group by teacher_id
 --ex11
 select user_id, count(follower_id) as followers_count
 from Followers
