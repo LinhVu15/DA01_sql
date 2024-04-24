@@ -1,0 +1,22 @@
+--ex1
+*/select distinct city from station where id%2=0
+--ex2
+select count(city) - count(distinct city)  from station
+--ex3
+--ex4
+SELECT Round(CAST(SUM(item_count*order_occurrences)/SUM(order_occurrences) as decimal),1)
+FROM items_per_order;
+--ex5
+SELECT candidate_id  FROM candidates where skill in ('Python', 'Tableau', 'PostgreSQL')
+--ex6 
+--ex7
+SELECT card_name, (MAX(issued_amount)-MIN(issued_amount)) as difference FROM monthly_cards_issued group by card_name
+--ex8
+--ex9
+--ex10
+--ex11
+select user_id, count(follower_id) as followers_count
+from Followers
+group by user_id
+--ex12
+select class from courses group by class having count(student)>5
