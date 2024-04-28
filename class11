@@ -1,0 +1,54 @@
+--ex1
+select b.continent,
+FLOOR(AVG(a.population))
+from city as a
+ join country as b
+on a.countrycode=b.code
+group by b.continent
+--ex2
+SELECT 
+round(cast(count(texts.email_id)/count(DISTINCT emails.email_id) as decimal,2)
+FROM emails 
+left join texts 
+on texts.email_id=emails.email_id
+and texts.signup_action ='Confirmed'
+--ex3
+--ex4
+          SELECT a.customer_id
+from customer_contracts as a 
+left join products as b 
+on a.product_id=b.product_id 
+group by a.customer_id
+having count(DISTINCT b.product_category)=3
+--ex5
+          SELECT 
+  mgr.employee_id, 
+  mgr.name, 
+  COUNT(emp.employee_id) AS reports_count, 
+  ROUND(AVG(emp.age)) AS average_age 
+FROM 
+  employees emp 
+  JOIN employees mgr ON emp.reports_to = mgr.employee_id 
+GROUP BY 
+  employee_id 
+ORDER BY 
+  employee_id
+--ex6
+  SELECT
+    P.product_name,
+    SUM(O.unit) AS unit
+FROM Orders AS O
+LEFT JOIN Products AS P
+    ON O.product_id = P.product_id
+WHERE O.order_date between '2020-02-01' and '2020-02-29'
+GROUP BY O.product_id
+HAVING unit >=100      
+--ex7
+SELECT a.page_id
+FROM pages as a 
+left JOIN page_likes as b 
+on a.page_id=b.page_id
+where b.liked_date is NULL
+order by a.page_id
+          
+          
