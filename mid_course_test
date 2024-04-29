@@ -1,7 +1,58 @@
 --ex1
+select 
+distinct replacement_cost, film_id from film
+order by replacement_cost 
 --ex2
+select
+case
+when replacement_cost between '9.99' and '19.99'
+then 'low' 
+when replacement_cost between '20' and '24.99'
+then 'medium' 
+when replacement_cost between '25' and '29.99'
+then 'high' 
+end as category,
+count(*)
+from film
+group by category
 --ex3
+select a.film_id,
+a.title,
+a.length,
+b.name
+from film as a
+join film_category as c
+on a.film_id=c.film_id
+join category as b
+on c.category_id=b.category_id
+group by a.film_id, b.name
+having b.name in ('Drama','Sports')
+order by a.length DESC
 --ex4
+select
+count(a.title) as number,
+b.name
+from film as a
+join film_category as c
+on a.film_id=c.film_id
+join category as b
+on c.category_id=b.category_id
+group by b.name
+order by number DESC
 --ex5
+select 
+a.first_name ||' '|| a.last_name,
+count(b.film_id) as number
+from actor as a
+join film_actor as b
+on a.actor_id=b.actor_id
+join film as c
+on b.film_id=c.film_id
+group by a.first_name ||' '|| a.last_name
+order by number DESC
 --ex6
+
 --ex7
+
+--ex8
+
