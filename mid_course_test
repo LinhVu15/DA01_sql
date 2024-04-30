@@ -51,8 +51,31 @@ on b.film_id=c.film_id
 group by a.first_name ||' '|| a.last_name
 order by number DESC
 --ex6
-
+SELECT count(*)
+FROM customer AS c
+RIGHT JOIN address AS a ON c.address_id = a.address_id
+WHERE c.customer_id IS NULL
 --ex7
-
+SELECT c.city,
+sum(p.amount) AS revenue
+FROM city AS c
+JOIN address AS a ON c.city_id = a.city_id
+JOIN customer AS cu ON cu.address_id = a.address_id
+JOIN payment AS p ON p.customer_id = cu.customer_id
+GROUP BY c.city
+ORDER BY revenue DESC limit 1
 --ex8
+ELECT CONCAT (
+  c.city
+  ,' '
+  ,co.country
+  ) AS city_country
+ ,sum(p.amount) AS revenue
+FROM city AS c
+JOIN address AS a ON c.city_id = a.city_id
+JOIN customer AS cu ON cu.address_id = a.address_id
+JOIN payment AS p ON p.customer_id = cu.customer_id
+JOIN country AS co ON c.country_id = co.country_id
+GROUP BY city_country
+ORDER BY revenue DESC limit 1
 
