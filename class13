@@ -1,1 +1,95 @@
+--ex1
+WITH job_count_cte AS (
+  SELECT 
+    company_id, 
+    title, 
+    description, 
+    COUNT(job_id) AS job_count
+  FROM job_listings
+  GROUP BY company_id, title, description
+)
+
+SELECT COUNT(DISTINCT company_id) AS duplicate_companies
+FROM job_count_cte
+WHERE job_count > 1;
+--ex2
+
+--ex3
+with case_count_cte as(
+SELECT distinct policy_holder_id
+from callers
+group by policy_holder_id
+having count(case_id)>=3)
+select count(policy_holder_id) as policy_holder_count
+from case_count_cte
+--ex4
+select a.page_id
+from pages as a  
+left join page_likes as b
+on a.page_id=b.page_id
+where b.user_id is NULL
+group by a.page_id
+--ex5
+
+--ex6
+with a as(
+select country, id, sum(amount) as  approved_total_amount,
+count(id) as approved_count ,
+DATE_FORMAT(trans_date,"%Y-%m") AS month
+from Transactions
+where  state ='approved '
+group by country,month),
+b as(
+select country, id,
+count(id) as trans_count ,
+sum(amount) as trans_total_amount ,
+DATE_FORMAT(trans_date,"%Y-%m") AS month
+from Transactions
+group by country,month)
+select  a.month,a.country,b.trans_count,a.approved_count,b.trans_total_amount,a.approved_total_amount 
+from a
+left join b 
+on a.id=b.id
+group by country, month
+--ex7
+# Write your MySQL query statement below
+select product_id,min(year) as first_year, quantity, price from Sales
+group by product_id
+--ex8
+select customer_id
+from customer
+group by customer_id
+having count(distinct product_key) = (select count(product_key) from product)
+--ex9
+SELECT employee_id
+FROM Employees as a
+WHERE manager_id not in (SELECT employee_id FROM employees) and salary < 30000
+ORDER BY employee_id 
+--ex10
+with job_count_cte as(
+select company_id,
+title,description,
+count(job_id) as job_count
+from job_listings
+group by company_id,
+title,description)
+select count(distinct company_id) as duplicate_companies
+from job_count_cte
+where job_count>1
+--ex11
+
+--ex12
+# Write your MySQL query statement below
+With CTE As(
+SELECT requester_id , accepter_id
+FROM RequestAccepted
+UNION ALL
+SELECT accepter_id , requester_id
+FROM RequestAccepted)
+
+select requester_id as id, count(requester_id) as num
+from CTE
+group by requester_id
+order by num desc
+limit 1
 
