@@ -13,6 +13,28 @@ SELECT COUNT(DISTINCT company_id) AS duplicate_companies
 FROM job_count_cte
 WHERE job_count > 1;
 --ex2
+with a as(
+select category,product,
+sum(spend) as total_spend
+from product_spend 
+where extract (year from transaction_date) = '2022'
+and category='appliance'
+group by category,product
+order by total_spend DESC 
+limit 2),
+
+ b as(
+select category,product,
+sum(spend) as total_spend
+from product_spend 
+where extract (year from transaction_date) = '2022'
+and category='electronics'
+group by category,product
+order by total_spend DESC 
+limit 2)
+select category,product,total_spend from a
+union all 
+select category,product,total_spend from b
 
 --ex3
 with case_count_cte as(
@@ -30,6 +52,31 @@ on a.page_id=b.page_id
 where b.user_id is NULL
 group by a.page_id
 --ex5
+with a as (
+select 
+user_id,
+extract (month from event_date) as month
+from user_actions
+where extract (month from event_date)='7' 
+and extract (year from event_date)='2022'
+and event_type in ('sign-in','like','comment')
+group by user_id,event_date),
+b as (
+select 
+user_id
+from user_actions
+where extract (month from event_date)='6' 
+and extract (year from event_date)='2022'
+and event_type in ('sign-in','like','comment')
+group by user_id)
+select
+a.month,
+count(DISTINCT a.user_id) as monthly_active_users
+from a  
+join b 
+on a.user_id=b.user_id
+group by a.month
+
 
 --ex6
 with a as(
@@ -77,6 +124,27 @@ select count(distinct company_id) as duplicate_companies
 from job_count_cte
 where job_count>1
 --ex11
+with CTE_1 as (
+select b.name as results
+from MovieRating as c
+join Users as b
+on b.user_id=c.user_id
+group by b.user_id
+order by
+count(c.rating) DESC, b.name limit 1),
+  CTE_2 as (
+    select a.title as results
+    from MovieRating as c
+    join Movies as a
+    on a.movie_id =c.movie_id 
+    where Month(c.created_at)='2' and
+     Year(c.created_at)='2020'
+    group by a.title
+    order by avg(c.rating) DESC, a.title limit 1)
+ select results from CTE_1
+ union 
+ select results from CTE_2
+  
 
 --ex12
 # Write your MySQL query statement below
