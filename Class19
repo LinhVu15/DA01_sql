@@ -24,7 +24,6 @@ UPDATE public.sales_dataset_rfm_prj
 SET CONTACTLASTNAME=RIGHT (contactfullname,
 length(contactfullname) -position('-' in contactfullname))
 
---ex4
 select
 UPPER(LEFT(contactfirstname,1))||LOWER(substring(contactfirstname 
 									  from 2 for length(contactfirstname)-1)) 
@@ -32,8 +31,25 @@ UPPER(LEFT(contactfirstname,1))||LOWER(substring(contactfirstname
 UPPER(LEFT(contactlastname,1))||LOWER(substring(contactlastname 
 									  from 2 for length(contactlastname)-1)) 
 									   contactlastname								   
-									   
-	   from public.sales_dataset_rfm_prj	    
+							from public.sales_dataset_rfm_prj
+--ex4
+
+ALTER TABLE public.sales_dataset_rfm_prj 
+ALTER COLUMN orderdate TYPE 
+date USING (orderdate::date);
+
+alter table public.sales_dataset_rfm_prj
+add column QTR_ID integer,
+add column MONTH_ID integer, 
+add column YEAR_ID integer;
+
+UPDATE public.sales_dataset_rfm_prj
+SET QTR_ID= extract(quarter from orderdate),
+ YEAR_ID= extract(year from orderdate),
+ MONTH_ID= extract(month from orderdate);
+
+
+
 --ex5
 **** TIM OUTLIER
 ALTER TABLE public.sales_dataset_rfm_prj 
