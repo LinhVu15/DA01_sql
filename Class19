@@ -64,10 +64,10 @@ Q3+1.5*IQR as max_value
 from 
 (
 select
-percentile_cont(0.025) within group (order by quantityordered) as Q1,
-percentile_cont(0.075) within group (order by quantityordered) as Q3,
-percentile_cont(0.075) within group (order by quantityordered) - 
-percentile_cont(0.025) within group (order by quantityordered) as IQR
+percentile_cont(0.25) within group (order by quantityordered) as Q1,
+percentile_cont(0.75) within group (order by quantityordered) as Q3,
+percentile_cont(0.75) within group (order by quantityordered) - 
+percentile_cont(0.25) within group (order by quantityordered) as IQR
 from public.sales_dataset_rfm_prj) as a )
 select * from public.sales_dataset_rfm_prj
 where quantityordered < (select min_value from min_max)
